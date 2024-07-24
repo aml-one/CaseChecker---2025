@@ -1,0 +1,853 @@
+﻿<Window x:Class="CaseChecker.MVVM.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:core="clr-namespace:CaseChecker.MVVM.Core"
+        xmlns:converter="clr-namespace:CaseChecker.MVVM.Converters"
+        xmlns:viewmodel="clr-namespace:CaseChecker.MVVM.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        WindowState="Normal"
+        AllowsTransparency="True"
+        Foreground="Beige"
+        Closing="Window_Closing"
+        Title="CaseChecker for Stats 2025"
+        Height="700"
+        Width="1000"
+        MinHeight="500"
+        MinWidth="800"
+        SizeChanged="Window_SizeChanged"
+        LocationChanged="Window_LocationChanged"
+        Icon="/Images/new_logo.png">
+
+    <Window.Background>
+        <SolidColorBrush Opacity="0.97" />
+    </Window.Background>
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="0,0,5,5"
+                      CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/LvItem.xaml" />
+                <ResourceDictionary Source="/Themes/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:LeftSideColumnVisibilityConverter x:Key="LeftSideColumnVisibilityConverter" />
+            <converter:RightSideColumnVisibilityConverter x:Key="RightSideColumnVisibilityConverter" />
+            <converter:LeftSideColumnSpanConverter x:Key="LeftSideColumnSpanConverter" />
+            <converter:RightSideColumnSpanConverter x:Key="RightSideColumnSpanConverter" />
+            <converter:RightSideColumnPositionConverter x:Key="RightSideColumnPositionConverter" />
+            <converter:DateFormatConverter x:Key="DateFormatConverter" />
+            <converter:RemoveFirstCharFromStringIfItsZConverter x:Key="RemoveFirstCharFromStringIfItsZConverter" />
+            <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converter:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter" />
+            <converter:StringToUriConverter x:Key="StringToUriConverter" />
+            <converter:LanguageToFlagConverter x:Key="LanguageToFlagConverter" />
+            <converter:SwitchLanguageInToolTipConverter x:Key="SwitchLanguageInToolTipConverter" />
+            <converter:AccessLevelToVisibilityConverter x:Key="AccessLevelToVisibilityConverter" />
+            <converter:CountToColorConverter x:Key="CountToColorConverter" />
+            <converter:ZeroToCollapsedVisibilityConverter x:Key="ZeroToCollapsedVisibilityConverter" />
+
+            <Style x:Key="lvHeaderStyle"
+                   TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="Background"
+                        Value="WhiteSmoke" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="BorderThickness"
+                        Value="0,0,0,0" />
+                <Setter Property="IsHitTestVisible"
+                        Value="False" />
+                <Setter Property="Margin"
+                        Value="-3,0,-3,0" />
+            </Style>
+
+            <DataTemplate x:Key="lvHeaderTemplate">
+                <DockPanel HorizontalAlignment="Left"
+                           LastChildFill="False">
+                    <TextBlock FontSize="11"
+                               Foreground="Black"
+                               FontWeight="Normal"
+                               Padding="8,0,0,0"
+                               Width="{TemplateBinding Width}"
+                               HorizontalAlignment="Left">
+                        <TextBlock.Text>
+                            <Binding />
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CrownsHeaderTemplate">
+                <Image Source="/Images/crown.png"
+                       Width="17"
+                       Height="17"
+                       Margin="19,0,6,0" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="AbutmentsHeaderTemplate">
+                <Image Source="/Images/abutment.png"
+                       Width="17"
+                       Height="17"
+                       Margin="18,0,6,0" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ModelsHeaderTemplate">
+                <Image Source="/Images/i32.png"
+                       Width="17"
+                       Height="17"
+                       Margin="10,0,6,0" />
+            </DataTemplate>
+
+            <ControlTemplate x:Key="ComboBoxToggleButton"
+                             TargetType="{x:Type ToggleButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="18" />
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="Border"
+                            Grid.ColumnSpan="2"
+                            CornerRadius="0"
+                            Background="#76797F"
+                            BorderBrush="#FF97A0A5"
+                            BorderThickness="1" />
+                    <Border Grid.Column="0"
+                            CornerRadius="0"
+                            Margin="1"
+                            Background="#76797F"
+                            BorderBrush="#FF97A0A5"
+                            BorderThickness="0,0,1,0" />
+                    <Path x:Name="Arrow"
+                          Grid.Column="1"
+                          Fill="BlanchedAlmond"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z" />
+                </Grid>
+                
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="ComboBoxTextBox"
+                             TargetType="{x:Type TextBox}">
+                <Border x:Name="PART_ContentHost"
+                        Focusable="False"
+                        Background="{TemplateBinding Background}" />
+            </ControlTemplate>
+
+            <Style x:Key="{x:Type ComboBox}"
+                   TargetType="{x:Type ComboBox}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true" />
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                        Value="Auto" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                        Value="Auto" />
+                <Setter Property="ScrollViewer.CanContentScroll"
+                        Value="true" />
+                <Setter Property="MinWidth"
+                        Value="72" />
+                <Setter Property="MinHeight"
+                        Value="18" />
+                <Setter Property="Foreground"
+                        Value="Beige" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid>
+                                <ToggleButton Name="ToggleButton"
+                                              Template="{StaticResource ComboBoxToggleButton}"
+                                              Grid.Column="2"
+                                              Focusable="false"
+                                              IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                              ClickMode="Press">
+                                </ToggleButton>
+                                <ContentPresenter Name="ContentSite"
+                                                  IsHitTestVisible="False"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  Margin="3,3,23,3"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left" />
+                                <TextBox x:Name="PART_EditableTextBox"
+                                         Style="{x:Null}"
+                                         Template="{StaticResource ComboBoxTextBox}"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Center"
+                                         Margin="3,3,23,3"
+                                         Focusable="True"
+                                         Background="#76797F"
+                                         Foreground="Green"
+                                         Visibility="Hidden"
+                                         IsReadOnly="{TemplateBinding IsReadOnly}" />
+                                <Popup Name="Popup"
+                                       Placement="Bottom"
+                                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       AllowsTransparency="True"
+                                       Focusable="False"
+                                       PopupAnimation="Slide">
+
+                                    <Grid Name="DropDown"
+                                          SnapsToDevicePixels="True"
+                                          MinWidth="{TemplateBinding ActualWidth}"
+                                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder"
+                                                Background="#FF3F3F3F"
+                                                BorderThickness="1"
+                                                BorderBrush="#888888" />
+                                        <ScrollViewer Margin="4,6,4,6"
+                                                      SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasItems"
+                                         Value="false">
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="MinHeight"
+                                            Value="95" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                         Value="false">
+                                    <Setter Property="Foreground"
+                                            Value="#888888" />
+                                </Trigger>
+                                <Trigger Property="IsGrouping"
+                                         Value="true">
+                                    <Setter Property="ScrollViewer.CanContentScroll"
+                                            Value="false" />
+                                </Trigger>
+                                <Trigger SourceName="Popup"
+                                         Property="Popup.AllowsTransparency"
+                                         Value="true">
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="CornerRadius"
+                                            Value="0" />
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="Margin"
+                                            Value="0,2,0,0" />
+                                </Trigger>
+                                <Trigger Property="IsEditable"
+                                         Value="true">
+                                    <Setter Property="IsTabStop"
+                                            Value="false" />
+                                    <Setter TargetName="PART_EditableTextBox"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                    <Setter TargetName="ContentSite"
+                                            Property="Visibility"
+                                            Value="Hidden" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                </Style.Triggers>
+            </Style>
+
+            <!-- SimpleStyles: ComboBoxItem -->
+            <Style x:Key="{x:Type ComboBoxItem}"
+                   TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true" />
+                <Setter Property="Foreground"
+                        Value="Beige" />
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                            <Border Name="Border"
+                                    Padding="2"
+                                    SnapsToDevicePixels="true">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted"
+                                         Value="true">
+                                    <Setter TargetName="Border"
+                                            Property="Background"
+                                            Value="#96999F" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                         Value="false">
+                                    <Setter Property="Foreground"
+                                            Value="#888888" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Button"
+                   x:Key="UpdateButton">
+                <Setter Property="OverridesDefaultStyle"
+                        Value="True" />
+                <Setter Property="Background"
+                        Value="#76797F" />
+                <Setter Property="Foreground"
+                        Value="Beige" />
+                <Setter Property="BorderBrush"
+                        Value="#FF97A0A5" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+
+                <Setter Property="Cursor"
+                        Value="Hand" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter x:Name="MyContentPresenter"
+                                                      Content="{TemplateBinding Content}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled"
+                             Value="False">
+                        <Setter Property="Background"
+                                Value="#46494F" />
+                        <Setter Property="Foreground"
+                                Value="#CCC" />
+                        <Setter Property="BorderBrush"
+                                Value="#666" />
+                    </Trigger>
+
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="#86898F" />
+                        <Setter Property="Foreground"
+                                Value="BlanchedAlmond" />
+                        <Setter Property="BorderBrush"
+                                Value="BlanchedAlmond" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border CornerRadius="8"
+            BorderThickness="0.5"
+            BorderBrush="Black"
+            Background="#56595F"
+            Opacity="0.97"
+            ClipToBounds="True">
+
+        <Grid Margin="4,0,4,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="38" />
+                <RowDefinition />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+
+            
+
+            <Image Source="{Binding Language, Converter={StaticResource LanguageToFlagConverter}}"
+                   d:Source="\Images\English.png"
+                   Margin="60,-35,190,0"
+                   Panel.ZIndex="-1"
+                   Opacity="0.05"
+                   Width="150"
+                   Height="150"
+                   HorizontalAlignment="Left"
+                   Grid.Column="0"
+                   Grid.RowSpan="2"
+                   />
+
+
+
+            <ProgressBar IsIndeterminate="True"
+                         Grid.ColumnSpan="10"
+                         Grid.RowSpan="2"
+                         Margin="-4,0,-4,0"
+                         Panel.ZIndex="-10"
+                         Opacity="0.10"
+                         PreviewMouseDown="TitleBar_PreviewMouseDown"
+                         BorderBrush="#55595F"
+                         Background="#55595F"
+                         Foreground="{Binding ProgressBarColor}"
+                         Visibility="{Binding ServerInfoModel.ServerIsWritingDatabase, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+            <DockPanel LastChildFill="True"
+                       Grid.ColumnSpan="10"
+                       Margin="-4,0,-4,0">
+
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,12,0"
+                                Cursor="Hand"
+                                Visibility="{Binding UpdateAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding StartProgramUpdateCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Image Source="\Images\system-update.png"
+                               Width="14"
+                               Height="14"
+                               Margin="0,0,4,0"
+                               VerticalAlignment="Center" />
+                        <TextBlock Text="{DynamicResource updateAvailable}"
+                                   d:Text="New version available"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold"
+                                   Foreground="Orange"
+                                   FontSize="14" />
+                    </StackPanel>
+
+
+                    <Button x:Name="btnMinimize"
+                            Content="▪"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="35"
+                            Height="35"
+                            FontSize="16"
+                            Margin="5,0,0,0"
+                            Foreground="Beige"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            IsTabStop="False"
+                            Click="BtnMinimize_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="Border"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver"
+                                                         Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="#76797F"
+                                                            TargetName="Border" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="btnMaximize"
+                            Content="▣"
+                            Tag="⧉"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="35"
+                            Height="35"
+                            FontSize="14"
+                            Padding="0,5,0,0"
+                            Foreground="Beige"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            IsTabStop="False"
+                            Click="BtnMaximize_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="Border"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver"
+                                                         Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="#76797F"
+                                                            TargetName="Border" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="btnCloseApplication"
+                            Content="╳"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="45"
+                            Height="35"
+                            FontSize="12"
+                            Foreground="Beige"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            IsTabStop="False"
+                            Click="BtnCloseApplication_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="Border"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver"
+                                                         Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="#de766b"
+                                                            TargetName="Border" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+
+                </StackPanel>
+
+                <Border x:Name="TitleBar"
+                        Background="Transparent"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="0,0,0,0"
+                        Height="35"
+                        VerticalAlignment="Top"
+                        PreviewMouseDown="TitleBar_PreviewMouseDown">
+
+
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/new_logo.png"
+                               Height="20"
+                               Margin="6,0,0,0" />
+
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="8,0"
+                                    PreviewMouseDown="TitleBar_PreviewMouseDown">
+
+                            <TextBlock Text="&lt;/"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#fa9e9b"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="CaseChecker"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="2025"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       FontStyle="Italic"
+                                       Foreground="Yellow"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="&gt;"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#fa9e9b"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text=" for Stats - "
+                                       FontSize="11"
+                                       Foreground="Beige"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding SiteID}"
+                                       FontSize="14"
+                                       Foreground="Beige"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Border>
+            </DockPanel>
+
+
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="10"
+                  PreviewMouseDown="TitleBar_PreviewMouseDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+
+                <Label Content="{DynamicResource serverStatus}"
+                       d:Content="Server Status"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Foreground="Beige"
+                       FontSize="7" />
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Bottom">
+
+                    <Label Content="{DynamicResource serverIs}"
+                           d:Content="Server is"
+                           FontSize="16"
+                           Foreground="{Binding StatusColor}"
+                           d:Foreground="LightGreen"
+                           Margin="0,0,-4,0" />
+                    <Label Content="{Binding ServerInfoModel.StatsServerStatus}"
+                           d:Content="Idle"
+                           FontSize="16"
+                           Foreground="{Binding StatusColor}"
+                           d:Foreground="LightGreen"
+                           FontWeight="SemiBold" />
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="{DynamicResource nextExpectedExport}"
+                               d:Content="Next Expected Export Time In"
+                               Grid.Column="0"
+                               Foreground="Beige"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               FontSize="7" />
+                        <Label Content="{Binding ExportClockCountDown}"
+                               d:Content="1:35"
+                               FontSize="22"
+                               Foreground="Beige"
+                               FontFamily="Courier New"
+                               Margin="0,-10,0,0"
+                               HorizontalAlignment="Center"
+                               FontWeight="SemiBold" />
+                    </StackPanel>
+
+                </StackPanel>
+
+                <Label Content="{DynamicResource inLocalTime}"
+                       d:Content="In Local Time"
+                       Grid.Column="1"
+                       Foreground="Beige"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       FontSize="7" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom">
+                    <Label Content="{DynamicResource lastChange}"
+                           d:Content="Last change in database:"
+                           FontSize="14"
+                           Foreground="Beige"
+                           Margin="0,0,-4,0" />
+
+                    <Label Content="{Binding LastDBUpdateLocalTime}"
+                           d:Content="Fetching data.."
+                           d:Foreground="LightGreen"
+                           FontSize="14"
+                           Foreground="{Binding UpdateTimeColor}"
+                           Opacity="{Binding UpdateTimeOpacity}"
+                           FontWeight="SemiBold" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="2" x:Name="mainGrid">
+                
+            </Grid>
+
+            <Grid Grid.Row="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Panel.ZIndex="100"
+                  Visibility="{Binding DebugShows}"
+                  d:Visibility="Visible"
+                  Margin="1,0,1,1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Label Content="╳"
+                       Grid.Row="1"
+                       Foreground="#333"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       FontSize="20"
+                       Panel.ZIndex="200"
+                       Margin="0,0,15,0"
+                       FontFamily="Sans Serif"
+                       Cursor="Hand"
+                       PreviewMouseDown="Label_MouseDoubleClick"
+                       Height="35"
+                       Width="30" />
+                <ListView ItemsSource="{Binding DebugMessages}"
+                          Grid.Row="1"
+                          Background="AntiqueWhite" 
+                          d:Visibility="Collapsed"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="0,2,0,2"
+                        HorizontalAlignment="Left">
+                <Label Content="D"
+                       FontSize="9"
+                       Foreground="{Binding DebugMessages.Count, Converter={StaticResource CountToColorConverter}}"
+                       Margin="-2,-1,0,0"
+                       Cursor="Hand"
+                       
+                       MouseDown="Label_MouseDoubleClick" />
+                <Label Content="{Binding DebugMessages.Count}"
+                       FontSize="9"
+                       Foreground="{Binding DebugMessages.Count, Converter={StaticResource CountToColorConverter}}"
+                       Margin="-9,-1,0,0"
+                       Cursor="Hand"
+                       
+                       MouseDown="Label_MouseDoubleClick" />
+
+                <Label Content="{DynamicResource refresh}"
+                       d:Content="Refresh"
+                       FontSize="9"
+                       Foreground="Beige"
+                       Margin="0,-1,0,0" />
+                <Button Grid.Row="2"
+                        Width="70"
+                        Height="18"
+                        HorizontalAlignment="Left"
+                        Margin="2,0,0,0"
+                        FontSize="8"
+                        Style="{StaticResource UpdateButton}"
+                        Cursor="Hand"
+                        Command="{Binding UpdateRequestCommand}"
+                        Content="{DynamicResource requestUpdate}"
+                        d:Content="Request Update" />
+
+                <Label Content="{DynamicResource orderBy}"
+                       d:Content="Order By"
+                       FontSize="9"
+                       Foreground="Beige"
+                       Margin="15,-1,0,0" />
+                <ComboBox Margin="0,0,4,0"
+                          FontSize="9"
+                          Height="18"
+                          SelectedIndex="{Binding OrderByIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{DynamicResource unitCount}"
+                                  d:Content="Unit count" />
+                    <ComboBoxItem Content="{DynamicResource caseId}"
+                                  d:Content="Case ID" />
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Margin="0,2,5,2">
+
+                <Button Content="Manage devices"
+                        Style="{StaticResource UpdateButton}"
+                        Margin="0,0,10,0"
+                        FontSize="8"
+                        Width="70"
+                        Height="18"
+                        Command="{Binding OpenUpAdminWindowCommand}"
+                        Visibility="{Binding AccessLevel, Converter={StaticResource AccessLevelToVisibilityConverter}}" />
+
+
+                <Ellipse Fill="LightGreen"
+                         Width="8"
+                         Height="8"
+                         VerticalAlignment="Center"
+                         Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <Label Content="{DynamicResource serverOnline}"
+                       d:Content="Server is online"
+                       Foreground="LightGreen"
+                       FontSize="9"
+                       Margin="0,-2,8,0"
+                       Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <Ellipse Fill="LightCoral"
+                         Width="8"
+                         Height="8"
+                         VerticalAlignment="Center"
+                         Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToInverseVisibilityConverter}}" />
+
+                <Label Content="{DynamicResource serverOffline}"
+                       d:Content="Server is offline"
+                       Foreground="LightCoral"
+                       FontSize="9"
+                       Margin="0,-2,8,0"
+                       Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToInverseVisibilityConverter}}" />
+
+
+                <Image Source="{Binding Language, Converter={StaticResource StringToUriConverter}}"
+                       d:Source="\Images\English.png"
+                       Margin="2,0,7,0"
+                       Width="16"
+                       Height="16"
+                       ToolTip="{Binding Language, Converter={StaticResource SwitchLanguageInToolTipConverter}}"
+                       Cursor="Hand">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding SwitchLanguageCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
+
+                <Label FontSize="9"
+                       Margin="0,-2,8,0"
+                       Foreground="Beige"
+                       x:Name="versionLabel"
+                       Content="{Binding AppVersion}"
+                       MouseDown="versionLabel_MouseDown"
+                       Cursor="Hand"
+                       d:Content="Made by AmL - v1.0 000000b" />
+            </StackPanel>
+        </Grid>
+
+    </Border>
+</Window>

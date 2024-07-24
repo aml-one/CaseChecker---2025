@@ -1,0 +1,442 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converter="clr-namespace:CaseChecker.MVVM.Converters"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    x:Class="CaseChecker.Themes.LvItem">
+
+    <converter:RushToVisibleConverter x:Key="RushToVisibleConverter" />
+    <converter:CommentIconToVisibleConverter x:Key="CommentIconToVisibleConverter" />
+    <converter:RemoveFirstCharFromStringIfItsZConverter x:Key="RemoveFirstCharFromStringIfItsZConverter" />
+    <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter" />
+    <converter:TextOneToVisibilityConverter x:Key="TextOneToVisibilityConverter" />
+    <converter:TextOneToCollapsedConverter x:Key="TextOneToCollapsedConverter" />
+    <converter:IdiomToImageConverter x:Key="IdiomToImageConverter" />
+    <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converter:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter" />
+    <converter:EqualToCollapsedVisibilityConverter x:Key="EqualToCollapsedVisibilityConverter" />
+    <converter:AccessToToDesignerNameConverter x:Key="AccessToToDesignerNameConverter" />
+
+    <Style TargetType="ListViewItem"
+           x:Key="LvItemLeft">
+        <EventSetter Event="PreviewMouseDown"
+                     Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="Item"
+                            BorderThickness="1"
+                            Tag="{Binding OrderID}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=headerIcon, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerCaseID, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerCrowns, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerAbutments, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerModels, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerSentOn, Path=Width}" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="30"
+                                         Height="30"
+                                         Margin="3,-2,2,0"
+                                         Grid.Column="0"
+                                         VerticalAlignment="Top">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="{Binding IconImage}"
+                                                    RenderOptions.BitmapScalingMode="Fant" />
+                                    </Ellipse.Fill>
+                                </Ellipse>
+
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Stretch">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           Margin="0">
+                                    <TextBlock Text="{Binding OrderID}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,10,0"
+                                               FontWeight="SemiBold"
+                                               Foreground="{Binding CommentColor}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock Text="{Binding RushCaseComment}"
+                                               VerticalAlignment="Center"
+                                               FontWeight="Bold"
+                                               Foreground="Crimson"
+                                               Margin="0,0,5,0"
+                                               HorizontalAlignment="Left"
+                                               Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock Text="{Binding OrderDesignedComment}"
+                                               VerticalAlignment="Center"
+                                               FontWeight="Bold"
+                                               Foreground="Green"
+                                               Margin="0,0,5,0"
+                                               Visibility="{Binding CommentIcon, Converter={StaticResource CommentIconToVisibleConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock Text="{Binding RedoCaseComment}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="Bold"
+                                               Foreground="Purple"
+                                               Margin="0,0,5,0"
+                                               Visibility="{Binding Redo, Converter={StaticResource RushToVisibleConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <TextBlock Text="{Binding ScrewRetainedCaseComment}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="Bold"
+                                               Foreground="DeepPink"
+                                               Margin="0,0,5,0"
+                                               Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToVisibilityConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                </DockPanel>
+
+                                <TextBlock Text="{Binding Items}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Gray"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Comment}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="OrangeRed"
+                                           Visibility="{Binding Comment, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding CommentIn3Shape}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="MediumOrchid"
+                                           Cursor="Hand"
+                                           Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="{Binding RushForMorningComment}"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Crimson"
+                                           Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="2"
+                                        Margin="6,-2,0,0"
+                                        Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
+                                <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
+                                    <Image Source="\Images\crown.png"
+                                           Grid.Column="4"
+                                           Width="18"
+                                           Height="18"
+                                           Margin="0,0,2,0" />
+                                </Grid>
+                                <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Image Source="\Images\screwretained.png"
+                                           Grid.Column="4"
+                                           Width="18"
+                                           Height="18"
+                                           Margin="0,0,2,0" />
+                                </Grid>
+                                <TextBlock Text="{Binding Crowns}"
+                                           Grid.Column="2"
+                                           FontSize="16"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Margin="4,-2,0,0"
+                                        Grid.Column="3">
+                                <Grid Visibility="{Binding EncodeCase, Converter={StaticResource TextOneToCollapsedConverter}}">
+                                    <Image Source="\Images\abutment.png"
+                                           Grid.Column="4"
+                                           Width="18"
+                                           Height="18"
+                                           Margin="0,2,-1,0"
+                                           Visibility="{Binding Abutments, Converter={StaticResource TextToVisibilityConverter}}" />
+                                </Grid>
+                                <Image Source="\Images\encode.png"
+                                       Grid.Column="4"
+                                       Width="18"
+                                       Height="18"
+                                       Margin="0,2,-1,0"
+                                       Visibility="{Binding EncodeCase, Converter={StaticResource TextOneToVisibilityConverter}}" />
+                                <TextBlock Text="{Binding Abutments}"
+                                           Grid.Column="3"
+                                           FontSize="16"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+
+                            <Image Source="\Images\models.png"
+                                   Grid.Column="4"
+                                   VerticalAlignment="Top"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,1,0,0"
+                                   Width="18"
+                                   Height="18"
+                                   Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}" />
+
+                            <StackPanel Grid.Column="5"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}" />
+                                <TextBlock Text="{Binding OriginalSentOnForChangedSentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{Binding CommentColor}">
+                                    <TextBlock.Visibility>
+                                        <MultiBinding StringFormat=" {0}, {1}"
+                                                      Converter="{StaticResource EqualToCollapsedVisibilityConverter}">
+                                            <Binding Path="SentOn" />
+                                            <Binding Path="OriginalSentOnForChangedSentOn" />
+                                        </MultiBinding>
+                                    </TextBlock.Visibility>
+                                </TextBlock>
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+
+                    <ControlTemplate.Triggers>
+                        <!--Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="#79bbf2"
+                                    TargetName="Item" />
+                            <Setter Property="Background"
+                                    Value="AliceBlue"
+                                    TargetName="Item" />
+                            <Setter Property="Cursor"
+                                    Value="Arrow"
+                                    TargetName="Item" />
+                        </Trigger-->
+                        <Trigger Property="ItemsControl.AlternationIndex"
+                                 Value="1">
+                            <Setter TargetName="Item"
+                                    Property="Background"
+                                    Value="#f1fafa" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+
+    <Style TargetType="ListViewItem"
+           x:Key="LvItemDeviceList">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="Item"
+                            BorderThickness="1"
+                            Tag="{Binding DeviceId}">
+                        <Grid Margin="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=headerIcon, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerDeviceInfo, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerPlatform, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerAppVersion, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerFriendlyName, Path=Width}" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top">
+                                <Image Source="{Binding Idiom,Converter={StaticResource IdiomToImageConverter}}"
+                                       Width="30"
+                                       Height="30" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Stretch">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           Margin="0">
+                                    <TextBlock Text="{Binding Name}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,10,0"
+                                               FontWeight="SemiBold"
+                                               Foreground="SteelBlue"
+                                               TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+
+                                <TextBlock Text="{Binding Manufacturer}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Green"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Model}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="IndianRed"
+                                           Visibility="{Binding Model, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding DeviceId}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Purple"
+                                           Visibility="{Binding OSVersion, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Access Level:"
+                                               VerticalAlignment="Center"
+                                               Margin="5,-2,4,0"
+                                               FontSize="8"
+                                               Foreground="Red"
+                                               Visibility="{Binding AccessTo, Converter={StaticResource TextToVisibilityConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding AccessTo, Converter={StaticResource AccessToToDesignerNameConverter}}"
+                                               VerticalAlignment="Center"
+                                               Margin="0,-2,10,0"
+                                               FontSize="8"
+                                               Foreground="SteelBlue"
+                                               Visibility="{Binding AccessTo, Converter={StaticResource TextToVisibilityConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Platform}"
+                                               Grid.Column="2"
+                                               Margin="0,0,5,0"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                    <TextBlock Text="{Binding OSVersion}"
+                                               Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Visibility="{Binding CPU, Converter={StaticResource TextToVisibilityConverter}}">
+                                    <TextBlock Text="CPU:"
+                                               FontSize="7"
+                                               Foreground="#666"
+                                               Margin="0,0,4,1"
+                                               VerticalAlignment="Bottom" />
+                                    <TextBlock Text="{Binding CPU}"
+                                               FontSize="9"
+                                               Foreground="#999"
+                                               VerticalAlignment="Bottom" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Visibility="{Binding RAM, Converter={StaticResource TextToVisibilityConverter}}">
+                                    <TextBlock Text="RAM:"
+                                               FontSize="7"
+                                               Foreground="#666"
+                                               Margin="0,0,2,1"
+                                               VerticalAlignment="Bottom" />
+                                    <TextBlock Text="{Binding RAM}"
+                                               FontSize="9"
+                                               Foreground="#999"
+                                               VerticalAlignment="Bottom" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Grid.Column="3">
+                                <TextBlock Text="{Binding AppVersion}"
+                                           Grid.Column="3"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Column="4"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding FriendlyName}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+
+                                <TextBlock Text="{Binding LastLogin, StringFormat='Seen {0}'}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontSize="9"
+                                           Visibility="{Binding LastLogin, Converter={StaticResource TextToVisibilityConverter}}"
+                                           Foreground="#888" />
+                            </StackPanel>
+
+
+
+
+
+                        </Grid>
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex"
+                                 Value="1">
+                            <Setter TargetName="Item"
+                                    Property="Background"
+                                    Value="WhiteSmoke" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="Gray"
+                                    TargetName="Item" />
+                            <Setter Property="Background"
+                                    Value="Beige"
+                                    TargetName="Item" />
+                            <Setter Property="Cursor"
+                                    Value="Arrow"
+                                    TargetName="Item" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsItTheHostDevice}"
+                                     Value="True">
+                            <Setter Property="Background"
+                                    Value="#dcfcef"
+                                    TargetName="Item" />
+                            <Setter Property="BorderBrush"
+                                    Value="#dcfcef"
+                                    TargetName="Item" />
+                            <Setter Property="FontWeight"
+                                    Value="SemiBold" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
+</ResourceDictionary>

@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="language">English</system:String>
+
+    <!-- LoginViewModel -->
+    <system:String x:Key="checkingServer">Checking server..</system:String>
+    <system:String x:Key="checkingIfDeviceRegistered">Checking if device is registered</system:String>
+    <system:String x:Key="attemtingToLogin">Attempting to login to server..</system:String>
+    <system:String x:Key="loginSuccess">Login success, gathering access info</system:String>
+    <system:String x:Key="errorOccuredDuringLogin">An error occured, please try again later!</system:String>
+    <system:String x:Key="deviceNotRegistered">Device is not registered on the server!</system:String>
+    <system:String x:Key="couldNotConnectToServer">Could not connect to server! Please check address!</system:String>
+
+    <!-- LoginWindow XAML -->
+    <system:String x:Key="yourDeviceSecret">Your Device Secret</system:String>
+    <system:String x:Key="serverAddress">Server Address</system:String>
+    <system:String x:Key="connectToServer">Connect To Server</system:String>
+    
+    <!-- MainWindow XAML -->
+    <system:String x:Key="updateAvailableMessageBox">New version available! Would you like to update the program to the new version?</system:String>
+    <system:String x:Key="updateAvailableMessageBoxTitle">There is an update</system:String>
+    <system:String x:Key="updateAvailable">New version available</system:String>
+    <system:String x:Key="lastAvailableVersion">Last available version</system:String>
+    <system:String x:Key="refresh">Refresh</system:String>
+    <system:String x:Key="requestUpdate">Request Update</system:String>
+    <system:String x:Key="orderBy">Order By</system:String>
+    <system:String x:Key="unitCount">Unit count</system:String>
+    <system:String x:Key="caseId">Case ID</system:String>
+    <system:String x:Key="serverOnline">Server is online</system:String>
+    <system:String x:Key="serverOffline">Server is offline</system:String>
+    <system:String x:Key="totalUnits">Total Units</system:String>
+    <system:String x:Key="crowns">Crowns</system:String>
+    <system:String x:Key="abutments">Abutments</system:String>
+    <system:String x:Key="allCases">All Cases</system:String>
+    <system:String x:Key="leftoverUnits">Leftover Units</system:String>
+    <system:String x:Key="leftoverCases">Leftover Cases</system:String>
+    <system:String x:Key="totalUnitsToday">Total Units Today</system:String>
+    <system:String x:Key="newCasesToday">New Cases Today</system:String>
+    
+    <system:String x:Key="serverStatus">Server Status</system:String>
+    <system:String x:Key="serverIs">Server is</system:String>
+    <system:String x:Key="nextExpectedExport">Next Expected Export Is In</system:String>
+    <system:String x:Key="inLocalTime">In Local Time</system:String>
+    <system:String x:Key="lastChange">Last change in database:</system:String>
+    
+    <system:String x:Key="caseIDHeader">Case ID</system:String>
+    <system:String x:Key="sentOnHeader">Received from Lab</system:String>
+    <system:String x:Key="cases">case(s)</system:String>
+
+    <system:String x:Key="openDebugWindow">Open Debug Panel</system:String>
+    <system:String x:Key="search">SEARCH</system:String>
+
+    <!-- MainViewModel -->
+    <system:String x:Key="due">Due</system:String>
+    <system:String x:Key="offline">Offline</system:String>
+    <system:String x:Key="waitingForServer">Waiting for server to come online..</system:String>
+    <system:String x:Key="fetchingData">Fetching data..</system:String>
+    <system:String x:Key="noScanFile">No scan file</system:String>
+    <system:String x:Key="change">Needs to change</system:String>
+    <system:String x:Key="designReady">Design ready</system:String>
+    <system:String x:Key="rush">RUSH</system:String>
+    <system:String x:Key="redo">REDO</system:String>
+    <system:String x:Key="today">Today</system:String>
+    <system:String x:Key="yesterday">Yesterday</system:String>
+    <system:String x:Key="model">Model</system:String>
+    <system:String x:Key="monday">Monday</system:String>
+    <system:String x:Key="tuesday">Tuesday</system:String>
+    <system:String x:Key="wednesday">Wednesday</system:String>
+    <system:String x:Key="thursday">Thursday</system:String>
+    <system:String x:Key="friday">Friday</system:String>
+    <system:String x:Key="saturday">Saturday</system:String>
+    <system:String x:Key="sunday">Sunday</system:String>
+    <system:String x:Key="unsectionedModel">Unsectioned model</system:String>
+    <system:String x:Key="antagonistModel">Antagonist model</system:String>
+
+    <system:String x:Key="srvExporting">Exporting cases</system:String>
+    <system:String x:Key="srvCollecting">Collecting cases</system:String>
+    <system:String x:Key="srvCleaning">Cleaning database</system:String>
+    <system:String x:Key="srvIdle">Idle</system:String>
+    <system:String x:Key="srvCalculating">Calculating daily statistics</system:String>
+
+
+    <!-- LvItem XAML -->
+    <system:String x:Key="redoCaseComment">(REDO)</system:String>
+    <system:String x:Key="rushCaseComment">(RUSH CASE)</system:String>
+    <system:String x:Key="rushForMorningComment">RUSH case for the morning!</system:String>
+    <system:String x:Key="orderDesignedComment">(Order received by the lab, but auto import failed)</system:String>
+    <system:String x:Key="screwRetainedCaseComment">ACH</system:String>
+    
+</ResourceDictionary>

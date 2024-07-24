@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="language">Chinese</system:String>
+    
+    <!-- LoginViewModel -->
+    <system:String x:Key="checkingServer">检查服务器</system:String>
+    <system:String x:Key="checkingIfDeviceRegistered">检查设备是否已注册</system:String>
+    <system:String x:Key="attemtingToLogin">尝试登录服务器</system:String>
+    <system:String x:Key="loginSuccess">登录成功，正在收集访问信息</system:String>
+    <system:String x:Key="errorOccuredDuringLogin">发生错误，请稍后再试！</system:String>
+    <system:String x:Key="deviceNotRegistered">设备未在服务器上注册！</system:String>
+    <system:String x:Key="couldNotConnectToServer">无法连接到服务器！ 请检查地址！</system:String>
+
+    <!-- LoginWindow XAML -->
+    <system:String x:Key="yourDeviceSecret">您的设备密钥</system:String>
+    <system:String x:Key="serverAddress">服务器地址</system:String>
+    <system:String x:Key="connectToServer">连接到服务器</system:String>
+    
+    <!-- MainWindow XAML -->
+    <system:String x:Key="updateAvailableMessageBox">新版本上线！ 您想将程序更新到新版本吗？</system:String>
+    <system:String x:Key="updateAvailableMessageBoxTitle">有更新</system:String>
+    <system:String x:Key="updateAvailable">新版本可用</system:String>
+    <system:String x:Key="lastAvailableVersion">最后可用版本</system:String>
+    <system:String x:Key="refresh">刷新</system:String>
+    <system:String x:Key="requestUpdate">请求更新</system:String>
+    <system:String x:Key="orderBy">订购依据</system:String>
+    <system:String x:Key="unitCount">单位数量</system:String>
+    <system:String x:Key="caseId">案例ID</system:String>
+    <system:String x:Key="serverOnline">服务器已上线</system:String>
+    <system:String x:Key="serverOffline">服务器离线</system:String>
+    <system:String x:Key="totalUnits">总单位数</system:String>
+    <system:String x:Key="crowns">皇冠</system:String>
+    <system:String x:Key="abutments">基台</system:String>
+    <system:String x:Key="allCases">所有案例</system:String>
+    <system:String x:Key="leftoverUnits">剩余单位</system:String>
+    <system:String x:Key="leftoverCases">剩余的箱子</system:String>
+    <system:String x:Key="totalUnitsToday">今日总单位数</system:String>
+    <system:String x:Key="newCasesToday">今日新增病例</system:String>
+
+    <system:String x:Key="serverStatus">服务器状态</system:String>
+    <system:String x:Key="serverIs">服务器是</system:String>
+    <system:String x:Key="nextExpectedExport">下次预计导出时间</system:String>
+    <system:String x:Key="inLocalTime">当地时间</system:String>
+    <system:String x:Key="lastChange">数据库的最后一次更改:</system:String>
+
+    <system:String x:Key="caseIDHeader">案例ID</system:String>
+    <system:String x:Key="sentOnHeader">从实验室收到</system:String>
+    <system:String x:Key="cases">案例</system:String>
+
+    <system:String x:Key="openDebugWindow">打开调试面板</system:String>
+    <system:String x:Key="search">搜索</system:String>
+
+    <!-- MainViewModel -->
+    <system:String x:Key="due">到期的</system:String>
+    <system:String x:Key="offline">离线</system:String>
+    <system:String x:Key="waitingForServer">等待服务器上线</system:String>
+    <system:String x:Key="fetchingData">获取数据</system:String>
+    <system:String x:Key="noScanFile">没有扫描</system:String>
+    <system:String x:Key="change">需要改变</system:String>
+    <system:String x:Key="designReady">设计就绪</system:String>
+    <system:String x:Key="rush">匆忙</system:String>
+    <system:String x:Key="redo">重做</system:String>
+    <system:String x:Key="today">今天</system:String>
+    <system:String x:Key="yesterday">昨天</system:String>
+    <system:String x:Key="model">模型</system:String>
+    <system:String x:Key="monday">星期一</system:String>
+    <system:String x:Key="tuesday">星期二</system:String>
+    <system:String x:Key="wednesday">星期三</system:String>
+    <system:String x:Key="thursday">星期四</system:String>
+    <system:String x:Key="friday">星期五</system:String>
+    <system:String x:Key="saturday">星期六</system:String>
+    <system:String x:Key="sunday">星期日</system:String>
+    <system:String x:Key="unsectionedModel">未剖切模型</system:String>
+    <system:String x:Key="antagonistModel">拮抗剂模型</system:String>
+
+    <system:String x:Key="srvExporting">导出案例</system:String>
+    <system:String x:Key="srvCollecting">征集案例</system:String>
+    <system:String x:Key="srvCleaning">清理数据库</system:String>
+    <system:String x:Key="srvIdle">闲置的</system:String>
+    <system:String x:Key="srvCalculating">计算每日统计数据</system:String>
+
+
+    <!-- LvItem XAML -->
+    <system:String x:Key="redoCaseComment">重做</system:String>
+    <system:String x:Key="rushCaseComment">匆忙案例</system:String>
+    <system:String x:Key="rushForMorningComment">匆忙 案例 早上!</system:String>
+    <system:String x:Key="orderDesignedComment">实验室收到订单，但自动导入失败</system:String>
+    <system:String x:Key="screwRetainedCaseComment">螺丝保留</system:String>
+
+</ResourceDictionary>
