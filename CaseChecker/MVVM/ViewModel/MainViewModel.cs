@@ -1091,7 +1091,7 @@ public partial class MainViewModel : ObservableObject
             if (!File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
             {
                 using var client = new HttpClient();
-                using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
+                using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker---2025/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
                 using var fs = new FileStream($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
             }
@@ -1106,7 +1106,7 @@ public partial class MainViewModel : ObservableObject
                 if (!File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
                 {
                     using var client = new HttpClient();
-                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseCheckerUpdater.exe");
+                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker---2025/CaseCheckerUpdater.exe");
                     using var fs = new FileStream($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
                     await s.CopyToAsync(fs);
                 }

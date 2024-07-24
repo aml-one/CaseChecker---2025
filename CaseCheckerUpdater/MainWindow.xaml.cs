@@ -118,7 +118,7 @@ namespace CaseCheckerUpdater
                     File.Move($@"{appPath}\CaseChecker.exe", $@"{LocalConfigFolderHelper}CaseChecker_old.exe");
                 Thread.Sleep(2000);
                 using var client = new HttpClient();
-                using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseChecker.exe");
+                using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker---2025/master/CaseChecker/Executable/CaseChecker.exe");
                 using var fs = new FileStream($@"{appPath}CaseChecker.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
 
@@ -130,7 +130,7 @@ namespace CaseCheckerUpdater
                 {
                     Thread.Sleep(500);
                     using var client = new HttpClient();
-                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseChecker.exe");
+                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker---2025/CaseChecker.exe");
                     using var fs = new FileStream($@"{appPath}CaseChecker.exe", FileMode.OpenOrCreate);
                     await s.CopyToAsync(fs);
                     
