@@ -36,6 +36,7 @@
     <None Remove="Images\i28.png" />
     <None Remove="Images\i32.png" />
     <None Remove="Images\i33.png" />
+    <None Remove="Images\image.png" />
     <None Remove="Images\models.png" />
     <None Remove="Images\new_logo.ico" />
     <None Remove="Images\new_logo.png" />
@@ -57,6 +58,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
     <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
@@ -92,6 +94,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\i33.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\image.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\models.png">

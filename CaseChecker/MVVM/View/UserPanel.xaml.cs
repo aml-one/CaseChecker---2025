@@ -75,7 +75,6 @@ namespace CaseChecker.MVVM.View
             InitializeComponent();
             DesignerID = designerID;
 
-            Debug.WriteLine("UserPanel DesignerID: " + designerID);
             UserPanelViewModel.Instance.DesignerID = designerID;
             SentOutCasesModel = MainViewModel.Instance.SentOutCasesModel;
 
@@ -114,16 +113,17 @@ namespace CaseChecker.MVVM.View
 
             var workingWidth = listView.ActualWidth - SystemParameters.VerticalScrollBarWidth; // take into account vertical scrollbar
 
-            double width = workingWidth - 268;
+            double width = workingWidth - 298;
             if (width < 0) width = 100;
 
 
             gView.Columns[0].Width = 34;
             gView.Columns[1].Width = width;
-            gView.Columns[2].Width = 45;
-            gView.Columns[3].Width = 44;
-            gView.Columns[4].Width = 30;
-            gView.Columns[5].Width = 110;
+            gView.Columns[2].Width = 30;
+            gView.Columns[3].Width = 45;
+            gView.Columns[4].Width = 44;
+            gView.Columns[5].Width = 30;
+            gView.Columns[6].Width = 110;
         }
 
         private void ExpanderLeft_Loaded(object sender, RoutedEventArgs e)

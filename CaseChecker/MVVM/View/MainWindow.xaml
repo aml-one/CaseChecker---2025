@@ -643,28 +643,7 @@
 
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right">
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="{DynamicResource nextExpectedExport}"
-                               d:Content="Next Expected Export Time In"
-                               Grid.Column="0"
-                               Foreground="Beige"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Top"
-                               FontSize="7" />
-                        <Label Content="{Binding ExportClockCountDown}"
-                               d:Content="1:35"
-                               FontSize="22"
-                               Foreground="Beige"
-                               FontFamily="Courier New"
-                               Margin="0,-10,0,0"
-                               HorizontalAlignment="Center"
-                               FontWeight="SemiBold" />
-                    </StackPanel>
-
-                </StackPanel>
+                
 
                 <Label Content="{DynamicResource inLocalTime}"
                        d:Content="In Local Time"
@@ -703,7 +682,7 @@
                   Grid.ColumnSpan="2"
                   Panel.ZIndex="100"
                   Visibility="{Binding DebugShows}"
-                  d:Visibility="Visible"
+                  d:Visibility="Collapsed"
                   Margin="1,0,1,1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -725,7 +704,7 @@
                 <ListView ItemsSource="{Binding DebugMessages}"
                           Grid.Row="1"
                           Background="AntiqueWhite" 
-                          d:Visibility="Collapsed"/>
+                          />
             </Grid>
 
             <StackPanel Orientation="Horizontal"

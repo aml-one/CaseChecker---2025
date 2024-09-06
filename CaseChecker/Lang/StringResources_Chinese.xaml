@@ -41,7 +41,6 @@
 
     <system:String x:Key="serverStatus">服务器状态</system:String>
     <system:String x:Key="serverIs">服务器是</system:String>
-    <system:String x:Key="nextExpectedExport">下次预计导出时间</system:String>
     <system:String x:Key="inLocalTime">当地时间</system:String>
     <system:String x:Key="lastChange">数据库的最后一次更改:</system:String>
 
@@ -53,7 +52,6 @@
     <system:String x:Key="search">搜索</system:String>
 
     <!-- MainViewModel -->
-    <system:String x:Key="due">到期的</system:String>
     <system:String x:Key="offline">离线</system:String>
     <system:String x:Key="waitingForServer">等待服务器上线</system:String>
     <system:String x:Key="fetchingData">获取数据</system:String>
@@ -88,5 +86,14 @@
     <system:String x:Key="rushForMorningComment">匆忙 案例 早上!</system:String>
     <system:String x:Key="orderDesignedComment">实验室收到订单，但自动导入失败</system:String>
     <system:String x:Key="screwRetainedCaseComment">螺丝保留</system:String>
+
+
+    <!-- UserPanel XAML -->
+    <system:String x:Key="close">关闭</system:String>
+    <system:String x:Key="zoom">缩放：鼠标滚轮</system:String>
+    <system:String x:Key="pan">平移：鼠标右键</system:String>
+    <system:String x:Key="getOrderImages">获取订单图片</system:String>
+    <system:String x:Key="extraComment">附加评论</system:String>
+    <system:String x:Key="commentIn3Shape">在 3Shape 中评论</system:String>
 
 </ResourceDictionary>

@@ -165,17 +165,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private string exportClockCountDown = "0:00";
-    public string ExportClockCountDown
-    {
-        get => exportClockCountDown;
-        set
-        {
-            exportClockCountDown = value;
-            RaisePropertyChanged(nameof(ExportClockCountDown));
-        }
-    }
-
+    
     private List<string> debugMessages = [];
     public List<string> DebugMessages
     {
@@ -276,17 +266,7 @@ public partial class MainViewModel : ObservableObject
     }
 
 
-    private int columnAccess = 0;
-    public int ColumnAccess
-    {
-        get => columnAccess;
-        set
-        {
-            columnAccess = value;
-            RaisePropertyChanged(nameof(ColumnAccess));
-        }
-    }
-
+    
     private string lastDBUpdate = "";
     public string LastDBUpdate
     {
@@ -317,61 +297,6 @@ public partial class MainViewModel : ObservableObject
         {
             serverIsOnline = value;
             RaisePropertyChanged(nameof(ServerIsOnline));
-        }
-    }
-
-    private bool autoSend0 = false;
-    public bool AutoSend0
-    {
-        get => autoSend0;
-        set
-        {
-            autoSend0 = value;
-            RaisePropertyChanged(nameof(AutoSend0));
-        }
-    }
-
-    private bool autoSend15 = false;
-    public bool AutoSend15
-    {
-        get => autoSend15;
-        set
-        {
-            autoSend15 = value;
-            RaisePropertyChanged(nameof(AutoSend15));
-        }
-    }
-
-    private bool autoSend30 = false;
-    public bool AutoSend30
-    {
-        get => autoSend30;
-        set
-        {
-            autoSend30 = value;
-            RaisePropertyChanged(nameof(AutoSend30));
-        }
-    }
-
-    private bool autoSend45 = false;
-    public bool AutoSend45
-    {
-        get => autoSend45;
-        set
-        {
-            autoSend45 = value;
-            RaisePropertyChanged(nameof(AutoSend45));
-        }
-    }
-
-    private bool canResetCounter = false;
-    public bool CanResetCounter
-    {
-        get => canResetCounter;
-        set
-        {
-            canResetCounter = value;
-            RaisePropertyChanged(nameof(CanResetCounter));
         }
     }
 
@@ -924,14 +849,7 @@ public partial class MainViewModel : ObservableObject
                 OrderByIndex = OrderByIdx;
         }
 
-        ColumnAccess = AccessLevel switch
-        {
-            "Left" => 1,
-            "Right" => 2,
-            "Both" => 3,
-            _ => 0,
-        };
-
+        
         UpdateRequestCommand = new RelayCommand(o => UpdateRequest());
         StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
         SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
@@ -954,7 +872,6 @@ public partial class MainViewModel : ObservableObject
         _orderTimer.Start();
 
 
-        ResetCountDownCounter();
 
         Task.Run(() => GetServerInfo()).Wait();
         Task.Run(() => GetTheOrderInfos(AccessLevel)).Wait();
@@ -1168,7 +1085,6 @@ public partial class MainViewModel : ObservableObject
             ServerInfoModel = infoModl;
             ProgressBarColor = "LightSalmon";
             StatusColor = "LightSalmon";
-            ExportClockCountDown = "-";
             LastDBUpdateLocalTime = (string)Lang["waitingForServer"];
             return;
         }
@@ -1182,53 +1098,9 @@ public partial class MainViewModel : ObservableObject
         if (ServerInfoModel is null)
             return;
 
-        if (Counter > 0)
-        {
-            Counter--;
-            int minutes = Counter / 60;
-            int seconds = Counter % 60;
-
-            if (seconds < 10)
-                ExportClockCountDown = minutes.ToString() + ":0" + seconds.ToString();
-            else
-                ExportClockCountDown = minutes.ToString() + ":" + seconds.ToString();
-
-            if (UpdateTimeOpacity > 0.5)
-            {
-                UpdateTimeColor = "LightGreen";
-                UpdateTimeOpacity -= 0.02;
-            }
-            else
-                UpdateTimeColor = "#DDD";
-        }
-        else
-            ExportClockCountDown = (string)Lang["due"]; ;
-
-
-        if (Counter < 5)
-        {
-            if (_timer.Interval != 2000)
-                _timer.Interval = 2000;
-        }
-        else
-        {
-            if (_timer.Interval != 10000)
-                _timer.Interval = 10000;
-        }
-
-        if (CanResetCounter)
-        {
-            if (!ServerInfoModel.ServerIsWritingDatabase)
-            {
-                CanResetCounter = false;
-                ResetCountDownCounter();
-                if (ServerIsOnline)
-                    _ = GetTheOrderInfos(AccessLevel);
-            }
-        }
     }
 
-    private async void OrderTimer_Elapsed(object? sender, ElapsedEventArgs e)
+    private void OrderTimer_Elapsed(object? sender, ElapsedEventArgs e)
     {
         //if (!ServerInfoModel.ServerIsWritingDatabase & ServerIsOnline)
         if (ServerIsOnline)
@@ -1237,7 +1109,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private async void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+    private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
     {
         _timer.Interval = 10000;
         if (LastDBUpdate != ServerInfoModel.CheckedOutLastUpdate && !ServerInfoModel.ServerIsWritingDatabase && ServerIsOnline)
@@ -1246,12 +1118,11 @@ public partial class MainViewModel : ObservableObject
             _ = GetTheOrderInfos(AccessLevel);
             UpdateTimeColor = "LightGreen";
             UpdateTimeOpacity = 1;
-            CanResetCounter = true;
+            LastDBUpdate = ServerInfoModel.CheckedOutLastUpdate!;
         }
 
         if (ServerIsOnline)
             _ = GetServerInfo();
-        LastDBUpdate = ServerInfoModel.CheckedOutLastUpdate!;
 
         // creating panels corresponding to the number of designers
         if (!PanelsAddedalready)
@@ -1600,11 +1471,6 @@ public partial class MainViewModel : ObservableObject
             string result = await http.GetStringAsync($"https://{ServerAddress}:10113/api/statsserverinfo");
             ServerInfoModel = JsonConvert.DeserializeObject<StatsDBSettingsModel>(result)!;
 
-            AutoSend0 = ServerInfoModel.AutoSend0;
-            AutoSend15 = ServerInfoModel.AutoSend15;
-            AutoSend30 = ServerInfoModel.AutoSend30;
-            AutoSend45 = ServerInfoModel.AutoSend45;
-
             if (!AccessLevel.Equals("both", StringComparison.CurrentCultureIgnoreCase))
             {
                 string siteId = ServerInfoModel.SiteID!;
@@ -1691,55 +1557,6 @@ public partial class MainViewModel : ObservableObject
         handler.Dispose();
     }
 
-    private void ResetCountDownCounter()
-    {
-        if (!AutoSend0 && !AutoSend15 && !AutoSend30 && !AutoSend45)
-        {
-            AutoSend0 = true;
-            AutoSend15 = true;
-            AutoSend30 = true;
-            AutoSend45 = true;
-        }
-
-        List<int> Times = new List<int>();
-        int TimeNowMinute, TimeNowSecond;
-
-        TimeNowMinute = DateTime.Now.Minute;
-        TimeNowSecond = DateTime.Now.Second;
-
-
-        int SecondsRemain = 60 - TimeNowSecond;
-
-        int TimeRemainTill0 = 60 - TimeNowMinute;
-        int TimeRemainTill15 = (60 - TimeNowMinute) + 15;
-        int TimeRemainTill30 = (60 - TimeNowMinute) + 30;
-        int TimeRemainTill45 = (60 - TimeNowMinute) + 45;
-
-        if (TimeRemainTill15 > 60) TimeRemainTill15 -= 60;
-        if (TimeRemainTill30 > 60) TimeRemainTill30 -= 60;
-        if (TimeRemainTill45 > 60) TimeRemainTill45 -= 60;
-
-        int TotalRemainingSecondsTill0 = ((TimeRemainTill0 - 1) * 60) + SecondsRemain;
-        int TotalRemainingSecondsTill15 = ((TimeRemainTill15 - 1) * 60) + SecondsRemain;
-        int TotalRemainingSecondsTill30 = ((TimeRemainTill30 - 1) * 60) + SecondsRemain;
-        int TotalRemainingSecondsTill45 = ((TimeRemainTill45 - 1) * 60) + SecondsRemain;
-
-
-        if (AutoSend0)
-            Times.Add(TotalRemainingSecondsTill0);
-
-        if (AutoSend15)
-            Times.Add(TotalRemainingSecondsTill15);
-
-        if (AutoSend30)
-            Times.Add(TotalRemainingSecondsTill30);
-
-        if (AutoSend45)
-            Times.Add(TotalRemainingSecondsTill45);
-
-        Counter = Times.Min();
-
-    }
 
     public void AddToDebug(string message)
     {

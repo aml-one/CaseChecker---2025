@@ -12,17 +12,4 @@ public partial class LvItem
     {
         InitializeComponent();
     }
-
-    private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (sender is ListViewItem item && item.IsSelected)
-        {
-            if (item.Content is not null)
-            {
-                CheckedOutCasesModel model = (CheckedOutCasesModel)item.Content;
-                if (!string.IsNullOrEmpty(model.CommentIn3Shape))
-                    MessageBox.Show(MainWindow.Instance, model.CommentIn3Shape, model.OrderID, MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-    }
 }

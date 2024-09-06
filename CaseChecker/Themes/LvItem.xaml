@@ -19,18 +19,24 @@
 
     <Style TargetType="ListViewItem"
            x:Key="LvItemLeft">
-        <EventSetter Event="PreviewMouseDown"
-                     Handler="ListViewItem_PreviewMouseLeftButtonDown" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
                     <Border x:Name="Item"
                             BorderThickness="1"
+                            Cursor="Hand"
                             Tag="{Binding OrderID}">
+                        <Border.InputBindings>
+                            <MouseBinding Gesture="LeftClick"
+                                          Command="{Binding DataContext.OpenOrderInfoPanelCommand, 
+                                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                          CommandParameter="{Binding .}"/>
+                        </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=headerIcon, Path=Width}" />
                                 <ColumnDefinition Width="{Binding ElementName=headerCaseID, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerRx, Path=Width}" />
                                 <ColumnDefinition Width="{Binding ElementName=headerCrowns, Path=Width}" />
                                 <ColumnDefinition Width="{Binding ElementName=headerAbutments, Path=Width}" />
                                 <ColumnDefinition Width="{Binding ElementName=headerModels, Path=Width}" />
@@ -38,16 +44,12 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="30"
-                                         Height="30"
-                                         Margin="3,-2,2,0"
-                                         Grid.Column="0"
-                                         VerticalAlignment="Top">
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="{Binding IconImage}"
-                                                    RenderOptions.BitmapScalingMode="Fant" />
-                                    </Ellipse.Fill>
-                                </Ellipse>
+                                <Image Source="{Binding IconImage}"
+                                       Width="30"
+                                       Height="30"
+                                       Margin="3,-2,2,0"
+                                       Grid.Column="0"
+                                       VerticalAlignment="Top" />
 
                             </StackPanel>
 
@@ -119,7 +121,6 @@
                                            Margin="5,-2,10,0"
                                            FontSize="8"
                                            Foreground="MediumOrchid"
-                                           Cursor="Hand"
                                            Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
                                            TextTrimming="CharacterEllipsis"
                                            TextWrapping="Wrap" />
@@ -135,10 +136,19 @@
 
                             </StackPanel>
 
+                            <Image Source="\Images\image.png"
+                                   Grid.Column="2"
+                                   Width="17"
+                                   Height="17"
+                                   VerticalAlignment="Top"
+                                   Margin="0,3,0,0"
+                                   Visibility="{Binding HasImage, Converter={StaticResource TextOneToVisibilityConverter}}"/>
+
+
                             <StackPanel Orientation="Horizontal"
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Left"
-                                        Grid.Column="2"
+                                        Grid.Column="3"
                                         Margin="6,-2,0,0"
                                         Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
@@ -166,7 +176,7 @@
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Left"
                                         Margin="4,-2,0,0"
-                                        Grid.Column="3">
+                                        Grid.Column="4">
                                 <Grid Visibility="{Binding EncodeCase, Converter={StaticResource TextOneToCollapsedConverter}}">
                                     <Image Source="\Images\abutment.png"
                                            Grid.Column="4"
@@ -189,7 +199,7 @@
                             </StackPanel>
 
                             <Image Source="\Images\models.png"
-                                   Grid.Column="4"
+                                   Grid.Column="5"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Center"
                                    Margin="0,1,0,0"
@@ -197,7 +207,7 @@
                                    Height="18"
                                    Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}" />
 
-                            <StackPanel Grid.Column="5"
+                            <StackPanel Grid.Column="6"
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}" />
@@ -221,23 +231,20 @@
 
 
                     <ControlTemplate.Triggers>
-                        <!--Trigger Property="IsMouseOver"
+                        <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter Property="BorderBrush"
-                                    Value="#79bbf2"
+                                    Value="#99c5ff"
                                     TargetName="Item" />
                             <Setter Property="Background"
-                                    Value="AliceBlue"
+                                    Value="#d5e9f2"
                                     TargetName="Item" />
-                            <Setter Property="Cursor"
-                                    Value="Arrow"
-                                    TargetName="Item" />
-                        </Trigger-->
+                        </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex"
                                  Value="1">
                             <Setter TargetName="Item"
                                     Property="Background"
-                                    Value="#f1fafa" />
+                                    Value="#dff5f5" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

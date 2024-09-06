@@ -35,6 +35,7 @@
             <converter:AccessLevelToVisibilityConverter x:Key="AccessLevelToVisibilityConverter" />
             <converter:CountToColorConverter x:Key="CountToColorConverter" />
             <converter:ZeroToCollapsedVisibilityConverter x:Key="ZeroToCollapsedVisibilityConverter" />
+            <converter:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
 
             <Style x:Key="lvHeaderStyle"
                    TargetType="{x:Type GridViewColumnHeader}">
@@ -73,6 +74,10 @@
                        Margin="19,0,6,0" />
             </DataTemplate>
 
+            <DataTemplate x:Key="RxHeaderTemplate">
+                <TextBlock Text="    Rx" />
+            </DataTemplate>
+
             <DataTemplate x:Key="AbutmentsHeaderTemplate">
                 <Image Source="/Images/abutment.png"
                        Width="17"
@@ -93,14 +98,7 @@
                     <TextBlock Text="{DynamicResource caseIDHeader}"
                                VerticalAlignment="Center"
                                Margin="7,0,0,0"
-                               FontSize="11"/>
-                    <TextBlock Text="{Binding DataContext.DesignerName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:UserPanel}}}"
-                               Margin="35,-2,0,-7"
-                               FontWeight="Normal"
-                               FontSize="24"
-                               Foreground="BurlyWood"
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center"/>
+                               FontSize="11" />
                 </DockPanel>
             </DataTemplate>
         </ResourceDictionary>
@@ -112,6 +110,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="23" />
+            <RowDefinition Height="20" />
             <RowDefinition />
             <RowDefinition Height="66" />
         </Grid.RowDefinitions>
@@ -166,8 +165,19 @@
             </Grid>
         </Border>
 
+        <StackPanel Orientation="Horizontal"
+                    Background="NavajoWhite"
+                    Grid.Row="1">
+            <TextBlock Text="{Binding DesignerName}"
+                       d:Text="Designer Name"
+                       Foreground="Green"
+                       FontWeight="SemiBold"
+                       FontSize="14"
+                       Padding="7,0,0,0" />
+        </StackPanel>
+
         <Grid Grid.Column="0"
-              Grid.Row="1"
+              Grid.Row="2"
               Background="White">
             <Image Source="/Images/new_logo.png"
                    Panel.ZIndex="1"
@@ -198,11 +208,181 @@
                      Margin="4,2,-2,-8" />
         </Grid>
 
+
+        <Border Grid.Row="2"
+                Background="#777"
+                Panel.ZIndex="110"
+                CornerRadius="10"
+                Margin="5"
+                Padding="5"
+                BorderBrush="Black"
+                Visibility="{Binding ShowImagePanel}"
+                d:Visibility="Visible"
+                BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <core:ImageViewControl x:Name="image"
+                                       Panel.ZIndex="2"
+                                       ImageSource="{Binding SelectedOrderImage.ImageHash}" />
+
+                <StackPanel Grid.Row="1"
+                            Margin="4,5,4,0">
+                    <DockPanel>
+                        <TextBlock Text="{DynamicResource zoom}"
+                                   d:Text="Zoom: Mouse wheel"
+                                   Foreground="Beige"
+                                   Margin="1" />
+                        <TextBlock Text="{DynamicResource pan}"
+                                   d:Text="Pan: Mouse right"
+                                   HorizontalAlignment="Right"
+                                   Margin="1"
+                                   Foreground="Beige" />
+
+                    </DockPanel>
+
+                    <Button Content="{DynamicResource close}"
+                            d:Content="Close"
+                            Margin="0,5,0,10"
+                            Height="30"
+                            FontSize="16"
+                            Cursor="Hand"
+                            Command="{Binding CloseImagePanelCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Background="#555"
+                Panel.ZIndex="100"
+                CornerRadius="10"
+                Margin="5"
+                Opacity="0.99"
+                BorderBrush="Black"
+                Visibility="{Binding ShowInfoPanel}"
+                d:Visibility="Visible"
+                BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition />
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{Binding SelectedOrderID}"
+                           d:Text="OrderID"
+                           FontSize="20"
+                           Margin="15,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="Beige" />
+
+
+                <TextBlock Text="{Binding SelectedItems}"
+                           d:Text="Selected Items...."
+                           Grid.Row="1"
+                           Foreground="Yellow"
+                           VerticalAlignment="Top"
+                           Margin="15,0" />
+
+                <TextBlock Text="{DynamicResource commentIn3Shape}"
+                           d:Text="Comment in 3Shape"
+                           Grid.Row="2"
+                           Visibility="{Binding SelectedComment, Converter={StaticResource EmptyToCollapsedConverter}}"
+                           d:Visibility="Visible"
+                           Foreground="LightGreen"
+                           VerticalAlignment="Bottom"
+                           Margin="15,0" />
+
+                <ScrollViewer Grid.Row="3"
+                              Visibility="{Binding SelectedComment, Converter={StaticResource EmptyToCollapsedConverter}}"
+                              d:Visibility="Visible"
+                              VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding SelectedComment}"
+                               d:Text="Comment"
+                               Foreground="AliceBlue"
+                               TextWrapping="Wrap"
+                               FontSize="14"
+                               Padding="15" />
+                </ScrollViewer>
+
+                <TextBlock Text="{DynamicResource extraComment}"
+                           d:Text="Additional comment"
+                           Grid.Row="4"
+                           d:Visibility="Visible"
+                           Visibility="{Binding SelectedExtraComment, Converter={StaticResource EmptyToCollapsedConverter}}"
+                           Foreground="orange"
+                           VerticalAlignment="Bottom"
+                           Margin="15,10,15,0" />
+
+                <ScrollViewer Grid.Row="5"
+                              Visibility="{Binding SelectedExtraComment, Converter={StaticResource EmptyToCollapsedConverter}}"
+                              d:Visibility="Visible"
+                              VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding SelectedExtraComment}"
+                               d:Text="Comment"
+                               Foreground="AliceBlue"
+                               TextWrapping="Wrap"
+                               FontSize="14"
+                               Padding="15" />
+                </ScrollViewer>
+
+                <ListView Grid.Row="6"
+                          Margin="10,0,10,0"
+                          MaxHeight="80"
+                          BorderThickness="1"
+                          Background="#333"
+                          SelectedItem="{Binding SelectedOrderImage}"
+                          ItemsSource="{Binding OrderImages}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Cursor="Hand">
+
+                                <TextBlock Text="{Binding ImageName}"
+                                           Foreground="Beige" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button Content="{DynamicResource getOrderImages}"
+                        d:Content="Get Order Images"
+                        Grid.Row="7"
+                        FontSize="16"
+                        Margin="10,10,10,0"
+                        Height="30"
+                        Cursor="Hand"
+                        IsEnabled="{Binding GetOrderImageButtonEnabled}"
+                        Visibility="{Binding HasImages}"
+                        d:Visibility="Visible"
+                        Command="{Binding GetOrderImagesCommand}" />
+
+                <Button Content="{DynamicResource close}"
+                        d:Content="Close"
+                        Grid.Row="8"
+                        FontSize="16"
+                        Margin="10,7,10,14"
+                        Height="30"
+                        Cursor="Hand"
+                        Command="{Binding CloseOrderInfoPanelCommand}" />
+            </Grid>
+        </Border>
+
         <ListView ItemsSource="{Binding SentOutCasesModelFinal}"
                   ItemContainerStyle="{StaticResource LvItemLeft}"
                   x:Name="listView"
                   AlternationCount="2"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Panel.ZIndex="2"
                   BorderBrush="Beige"
                   Opacity="0.96"
@@ -230,6 +410,10 @@
                                     HeaderTemplate="{StaticResource DesignerNameHeaderTemplate}"
                                     d:Header="Case ID"
                                     DisplayMemberBinding="{Binding OrderID}" />
+                    <GridViewColumn x:Name="headerRx"
+                                    Width="30"
+                                    HeaderTemplate="{StaticResource RxHeaderTemplate}"
+                                    DisplayMemberBinding="{Binding HasImage}" />
                     <GridViewColumn x:Name="headerCrowns"
                                     Width="45"
                                     HeaderTemplate="{StaticResource CrownsHeaderTemplate}"
@@ -314,7 +498,7 @@
             </ListView.GroupStyle>
         </ListView>
 
-        <Border Grid.Row="2"
+        <Border Grid.Row="3"
                 Grid.Column="1"
                 BorderThickness="1"
                 Margin="0,4,0,0"

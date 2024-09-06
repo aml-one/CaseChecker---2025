@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace CaseChecker.MVVM.ViewModel;
 
@@ -24,7 +26,9 @@ public partial class UserPanelViewModel : ObservableObject
     public System.Timers.Timer _periodicTimer;
     public static readonly string LocalConfigFolderHelper = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Stats_CaseChecker\";
 
-    private string designerID;
+
+    #region Properties
+    private string designerID = "";
     public string DesignerID
     {
         get => designerID;
@@ -35,7 +39,7 @@ public partial class UserPanelViewModel : ObservableObject
         }
     }
     
-    private string designerName;
+    private string designerName = "";
     public string DesignerName
     {
         get => designerName;
@@ -330,7 +334,7 @@ public partial class UserPanelViewModel : ObservableObject
         }
     }
 
-    private string search;
+    private string search = "";
     public string Search
     {
         get => search;
@@ -345,9 +349,137 @@ public partial class UserPanelViewModel : ObservableObject
         }
     }
 
+    private Visibility showInfoPanel = Visibility.Hidden;
+    public Visibility ShowInfoPanel
+    {
+        get => showInfoPanel;
+        set
+        {
+            showInfoPanel = value;
+            RaisePropertyChanged(nameof(ShowInfoPanel));
+        }
+    }
+    
+    private Visibility hasImages = Visibility.Collapsed;
+    public Visibility HasImages
+    {
+        get => hasImages;
+        set
+        {
+            hasImages = value;
+            RaisePropertyChanged(nameof(HasImages));
+        }
+    }
+
+    private string selectedOrderID = "";
+    public string SelectedOrderID
+    {
+        get => selectedOrderID;
+        set
+        {
+            selectedOrderID = value;
+            RaisePropertyChanged(nameof(SelectedOrderID));
+        }
+    }
+    
+    private string selectedItems = "";
+    public string SelectedItems
+    {
+        get => selectedItems;
+        set
+        {
+            selectedItems = value;
+            RaisePropertyChanged(nameof(SelectedItems));
+        }
+    }
+    
+    private string selectedComment = "";
+    public string SelectedComment
+    {
+        get => selectedComment;
+        set
+        {
+            selectedComment = value;
+            RaisePropertyChanged(nameof(SelectedComment));
+        }
+    }
+    
+    private string selectedExtraComment = "";
+    public string SelectedExtraComment
+    {
+        get => selectedExtraComment;
+        set
+        {
+            selectedExtraComment = value;
+            RaisePropertyChanged(nameof(SelectedExtraComment));
+        }
+    }
+    
+    private bool getOrderImageButtonEnabled = true;
+    public bool GetOrderImageButtonEnabled
+    {
+        get => getOrderImageButtonEnabled;
+        set
+        {
+            getOrderImageButtonEnabled = value;
+            RaisePropertyChanged(nameof(GetOrderImageButtonEnabled));
+        }
+    }
+
+    private List<CheckedOutCaseImagesModel> orderImages = [];
+    public List<CheckedOutCaseImagesModel> OrderImages
+    {
+        get => orderImages;
+        set
+        {
+            orderImages = value;
+            RaisePropertyChanged(nameof(OrderImages));
+        }
+    }
+
+    private CheckedOutCaseImagesModel selectedOrderImage;
+    public CheckedOutCaseImagesModel SelectedOrderImage
+    {
+        get => selectedOrderImage;
+        set
+        {
+            selectedOrderImage = value;
+            RaisePropertyChanged(nameof(SelectedOrderImage));
+            ConvertImageHashBackToImage();
+        }
+    }
+
+
+    private BitmapImage convertedImage;
+    public BitmapImage ConvertedImage
+    {
+        get => convertedImage;
+        set
+        {
+            convertedImage = value;
+            RaisePropertyChanged(nameof(ConvertedImage));
+        }
+    }
+
+    private Visibility showImagePanel = Visibility.Hidden;
+    public Visibility ShowImagePanel
+    {
+        get => showImagePanel;
+        set
+        {
+            showImagePanel = value;
+            RaisePropertyChanged(nameof(ShowImagePanel));
+        }
+    }
+
+    #endregion Properties
 
     public RelayCommand FilterCommand { get; set; }
     public RelayCommand ClearFilterCommand { get; set; }
+    public RelayCommand CloseOrderInfoPanelCommand { get; set; }
+    public RelayCommand OpenOrderInfoPanelCommand { get; set; }
+    public RelayCommand GetOrderImagesCommand { get; set; }
+    public RelayCommand CloseImagePanelCommand { get; set; }
 
 
     public UserPanelViewModel()
@@ -378,6 +510,91 @@ public partial class UserPanelViewModel : ObservableObject
 
         FilterCommand = new RelayCommand(o => Filter());
         ClearFilterCommand = new RelayCommand(o => ClearFilter());
+        CloseOrderInfoPanelCommand = new RelayCommand(o => CloseOrderInfoPanel());
+        OpenOrderInfoPanelCommand = new RelayCommand(o => OpenOrderInfoPanel(o));
+        GetOrderImagesCommand = new RelayCommand(o => GetOrderImages());
+        CloseImagePanelCommand = new RelayCommand(o => CloseImagePanel());
+    }
+
+    private void CloseImagePanel()
+    {
+        ShowImagePanel = Visibility.Collapsed;
+        SelectedOrderImage = null;
+        SelectedOrderImage = null;
+        ConvertedImage = null;
+        GetOrderImageButtonEnabled = true;
+    }
+
+    private void ConvertImageHashBackToImage()
+    {
+        if (SelectedOrderImage is not null)
+            ShowImagePanel = Visibility.Visible;
+    }
+
+    private async void GetOrderImages()
+    {
+        GetOrderImageButtonEnabled = false;
+        OrderImages = [];
+        if (await GetOrderImagesFromAPI())
+            HasImages = Visibility.Collapsed;
+        else
+            GetOrderImageButtonEnabled = true;
+    }
+
+    private async Task<bool> GetOrderImagesFromAPI()
+    {
+        var handler = new HttpClientHandler()
+        {
+            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+        };
+
+        var http = new HttpClient(handler);
+        http.DefaultRequestHeaders.Add("DeviceId", MainViewModel.Instance.DeviceId);
+
+        List<CheckedOutCaseImagesModel> imageModelList = [];
+
+        try
+        {
+            string result = await http.GetStringAsync($"https://{MainViewModel.Instance.ServerAddress}:10113/api/statsgetcheckedoutcaseimages/{SelectedOrderID}");
+            imageModelList = JsonConvert.DeserializeObject<List<CheckedOutCaseImagesModel>>(result)!;
+        }
+        catch (Exception ex)
+        {
+            MainViewModel.Instance.AddToDebug("#99: " + ex.Message);
+            return false;
+        }
+        http.Dispose();
+        handler.Dispose();
+
+        OrderImages = imageModelList;
+        return true;
+    }
+
+    private void CloseOrderInfoPanel()
+    {
+        ShowInfoPanel = Visibility.Hidden;
+        OrderImages = [];
+    }
+    
+    public void OpenOrderInfoPanel(object obj)
+    {
+        if (obj is not null)
+        {
+            if (obj is CheckedOutCasesModel model)
+            {
+                SelectedOrderID = model.OrderID!;
+                SelectedItems = model.Items!;
+                
+                SelectedComment = model.CommentIn3Shape!;
+                SelectedExtraComment = model.Comment!;
+
+                if (model.HasImage == "1")
+                    HasImages = Visibility.Visible;
+                else
+                    HasImages = Visibility.Collapsed;
+            }
+        }
+        ShowInfoPanel = Visibility.Visible;
     }
 
     private void PeriodicTimer_Elapsed(object? sender, ElapsedEventArgs e)

@@ -41,7 +41,6 @@
     
     <system:String x:Key="serverStatus">Server Status</system:String>
     <system:String x:Key="serverIs">Server is</system:String>
-    <system:String x:Key="nextExpectedExport">Next Expected Export Is In</system:String>
     <system:String x:Key="inLocalTime">In Local Time</system:String>
     <system:String x:Key="lastChange">Last change in database:</system:String>
     
@@ -53,7 +52,6 @@
     <system:String x:Key="search">SEARCH</system:String>
 
     <!-- MainViewModel -->
-    <system:String x:Key="due">Due</system:String>
     <system:String x:Key="offline">Offline</system:String>
     <system:String x:Key="waitingForServer">Waiting for server to come online..</system:String>
     <system:String x:Key="fetchingData">Fetching data..</system:String>
@@ -88,5 +86,14 @@
     <system:String x:Key="rushForMorningComment">RUSH case for the morning!</system:String>
     <system:String x:Key="orderDesignedComment">(Order received by the lab, but auto import failed)</system:String>
     <system:String x:Key="screwRetainedCaseComment">ACH</system:String>
+    
+    <!-- UserPanel XAML -->
+    <system:String x:Key="close">Close</system:String>
+    <system:String x:Key="zoom">Zoom: Mouse wheel</system:String>
+    <system:String x:Key="pan">Pan: Mouse right</system:String>
+    <system:String x:Key="getOrderImages">Get Order Images</system:String>
+    <system:String x:Key="extraComment">Additional comment</system:String>
+    <system:String x:Key="commentIn3Shape">Comment in 3Shape</system:String>
+    
     
 </ResourceDictionary>

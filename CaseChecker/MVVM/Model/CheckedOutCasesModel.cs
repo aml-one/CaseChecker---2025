@@ -23,6 +23,7 @@ public class CheckedOutCasesModel
     public string? CommentIn3Shape { get; set; }
     public string? EncodeCase { get; set; } = "False";
     public string? IconImage { get; set; }
+    public string? HasImage { get; set; } = "0";
 
     public string? TotalUnitsWithPrefixZero { get; set; } = "0";
     public string? OriginalSentOnForChangedSentOn { get; set; }
