@@ -506,8 +506,9 @@ public class ManagementViewModel : ObservableObject
                 LatestAppVersion = remVersion;
             }));
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            MainViewModel.Instance.AddToDebug("#1000e: " + ex.Message);
             LatestAppVersion = "-";
             try
             {
@@ -521,11 +522,11 @@ public class ManagementViewModel : ObservableObject
                     LatestAppVersionSecondary = remVersion;
                 }));
             }
-            catch (Exception ex)
+            catch (Exception exx)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    MainViewModel.Instance.AddToDebug("#100e: " + ex.Message);
+                    MainViewModel.Instance.AddToDebug("#1001e: " + exx.Message);
                 }));
             }
         }

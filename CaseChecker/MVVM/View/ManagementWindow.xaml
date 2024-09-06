@@ -87,6 +87,7 @@
                                VerticalAlignment="Center"
                                Padding="0,0,4,0" />
                         <TextBlock Text="{Binding LatestAppVersion, StringFormat={}v{0}}"
+                                   d:Text="v1.0"
                                    Foreground="Yellow"
                                    FontWeight="SemiBold"
                                    FontSize="15"
@@ -112,6 +113,7 @@
                                VerticalAlignment="Center"
                                Padding="0,0,4,0" />
                         <TextBlock Text="{Binding LatestAppVersionSecondary, StringFormat={}v{0}}"
+                                   d:Text="v1.1"
                                    Foreground="LightGreen"
                                    FontWeight="SemiBold"
                                    FontSize="15"
