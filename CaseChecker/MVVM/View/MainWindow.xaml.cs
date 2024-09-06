@@ -160,7 +160,7 @@ namespace CaseChecker.MVVM.View
             double remoteVersion = 0;
             try
             {
-                string result = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/version.txt");
+                string result = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/aml-one/CaseChecker---2025/master/CaseChecker/version.txt");
                 _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion);
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
@@ -175,7 +175,7 @@ namespace CaseChecker.MVVM.View
             {
                 try
                 {
-                    string result = await new HttpClient().GetStringAsync("https://aml.one/CaseChecker/version.txt");
+                    string result = await new HttpClient().GetStringAsync("https://aml.one/CaseChecker---2025/version.txt");
                     _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion);
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
