@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -38,7 +39,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(DesignerID));
         }
     }
-    
+
     private string designerName = "";
     public string DesignerName
     {
@@ -60,7 +61,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChangedStatic(nameof(Instance));
         }
     }
-    
+
     private static MainViewModel? _mainViewModel;
     public static MainViewModel mainViewModel
     {
@@ -311,7 +312,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(SentOutCasesModelRAW));
         }
     }
-    
+
     private List<CheckedOutCasesModel> sentOutCasesModel = [];
     public List<CheckedOutCasesModel> SentOutCasesModel
     {
@@ -359,7 +360,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(ShowInfoPanel));
         }
     }
-    
+
     private Visibility hasImages = Visibility.Collapsed;
     public Visibility HasImages
     {
@@ -381,7 +382,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(SelectedOrderID));
         }
     }
-    
+
     private string selectedItems = "";
     public string SelectedItems
     {
@@ -392,7 +393,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(SelectedItems));
         }
     }
-    
+
     private string selectedComment = "";
     public string SelectedComment
     {
@@ -403,7 +404,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(SelectedComment));
         }
     }
-    
+
     private string selectedExtraComment = "";
     public string SelectedExtraComment
     {
@@ -414,7 +415,7 @@ public partial class UserPanelViewModel : ObservableObject
             RaisePropertyChanged(nameof(SelectedExtraComment));
         }
     }
-    
+
     private bool getOrderImageButtonEnabled = true;
     public bool GetOrderImageButtonEnabled
     {
@@ -492,11 +493,11 @@ public partial class UserPanelViewModel : ObservableObject
         _orderTimer = new System.Timers.Timer(60000);
         _orderTimer.Elapsed += OrderTimer_Elapsed;
         _orderTimer.Start();
-        
+
         _startTimer = new System.Timers.Timer(1000);
         _startTimer.Elapsed += StartTimer_Elapsed;
         _startTimer.Start();
-        
+
         _periodicTimer = new System.Timers.Timer(2000);
         _periodicTimer.Elapsed += PeriodicTimer_Elapsed;
         _periodicTimer.Start();
@@ -575,7 +576,7 @@ public partial class UserPanelViewModel : ObservableObject
         ShowInfoPanel = Visibility.Hidden;
         OrderImages = [];
     }
-    
+
     public void OpenOrderInfoPanel(object obj)
     {
         if (obj is not null)
@@ -584,7 +585,7 @@ public partial class UserPanelViewModel : ObservableObject
             {
                 SelectedOrderID = model.OrderID!;
                 SelectedItems = model.Items!;
-                
+
                 SelectedComment = model.CommentIn3Shape!;
                 SelectedExtraComment = model.Comment!;
 
@@ -700,29 +701,35 @@ public partial class UserPanelViewModel : ObservableObject
 
                     if (model.SentOn != $"z{(string)Lang["today"]}" || model.SentOn != $"9{(string)Lang["yesterday"]}")
                     {
-                        if (DateTime.TryParse(model.SentOn, out DateTime sentOn))
+                        if (DateTime.TryParse(model.SentOn, out DateTime parsedSentOn))
                         {
-                            string dayName = sentOn.ToString("dddd");
+                            DateTime sentOn = DateTime.ParseExact(model.SentOn, "MM-dd-yyyy", CultureInfo.InvariantCulture);
 
-                            dayName = dayName switch
+                            if (sentOn > DateTime.Now.AddYears(-2))
+                            //if (DateTime.TryParse(model.SentOn, out DateTime sentOn))
                             {
-                                "星期一" => $"2{(string)Lang["monday"]}",
-                                "星期二" => $"3{(string)Lang["tuesday"]}",
-                                "星期三" => $"4{(string)Lang["wednesday"]}",
-                                "星期四" => $"5{(string)Lang["thursday"]}",
-                                "星期五" => $"6{(string)Lang["friday"]}",
-                                "星期六" => $"7{(string)Lang["saturday"]}",
-                                "星期日" => $"8{(string)Lang["sunday"]}",
-                                "Monday" => $"2{(string)Lang["monday"]}",
-                                "Tuesday" => $"3{(string)Lang["tuesday"]}",
-                                "Wednesday" => $"4{(string)Lang["wednesday"]}",
-                                "Thursday" => $"5{(string)Lang["thursday"]}",
-                                "Friday" => $"6{(string)Lang["friday"]}",
-                                "Saturday" => $"7{(string)Lang["saturday"]}",
-                                "Sunday" => $"8{(string)Lang["sunday"]}",
-                                _ => dayName,
-                            };
-                            model.SentOn = dayName;
+                                string dayName = sentOn.ToString("dddd");
+
+                                dayName = dayName switch
+                                {
+                                    "星期一" => $"2{(string)Lang["monday"]}",
+                                    "星期二" => $"3{(string)Lang["tuesday"]}",
+                                    "星期三" => $"4{(string)Lang["wednesday"]}",
+                                    "星期四" => $"5{(string)Lang["thursday"]}",
+                                    "星期五" => $"6{(string)Lang["friday"]}",
+                                    "星期六" => $"7{(string)Lang["saturday"]}",
+                                    "星期日" => $"8{(string)Lang["sunday"]}",
+                                    "Monday" => $"2{(string)Lang["monday"]}",
+                                    "Tuesday" => $"3{(string)Lang["tuesday"]}",
+                                    "Wednesday" => $"4{(string)Lang["wednesday"]}",
+                                    "Thursday" => $"5{(string)Lang["thursday"]}",
+                                    "Friday" => $"6{(string)Lang["friday"]}",
+                                    "Saturday" => $"7{(string)Lang["saturday"]}",
+                                    "Sunday" => $"8{(string)Lang["sunday"]}",
+                                    _ => dayName,
+                                };
+                                model.SentOn = dayName;
+                            }
                         }
                     }
 
@@ -850,20 +857,20 @@ public partial class UserPanelViewModel : ObservableObject
                     if (!string.IsNullOrEmpty(model.Crowns))
                     {
                         _ = int.TryParse(model.Crowns, out int crowns);
-                        
+
                         TotalCrowns += crowns;
                         TotalUnits += crowns;
 
                         if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
                             (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
                                 DateTime.Now.Hour < 5))
-                            TotalUnitsToday += crowns;                        
+                            TotalUnitsToday += crowns;
                     }
 
                     if (!string.IsNullOrEmpty(model.Abutments))
                     {
                         _ = int.TryParse(model.Abutments, out int abutments);
-                        
+
                         TotalAbutments += abutments;
                         TotalUnits += abutments;
 
@@ -873,7 +880,7 @@ public partial class UserPanelViewModel : ObservableObject
                             TotalUnitsToday += abutments;
                     }
 
-                    
+
                     if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
                             (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
                                 DateTime.Now.Hour < 5))
@@ -884,7 +891,7 @@ public partial class UserPanelViewModel : ObservableObject
 
                     if (!noScanFile)
                         TotalOrders++;
-                    
+
 
                     if (TotalOrders == TotalOrdersToday || TotalOrdersToday == 0)
                         TotalOrdersTodaySameAsAllTimeTotal = Visibility.Hidden;
@@ -913,7 +920,7 @@ public partial class UserPanelViewModel : ObservableObject
             }).Wait();
 
             TotalOrdersLeftOvers = TotalOrders - TotalOrdersToday;
-            
+
 
             TotalUnitsLeftOver = TotalUnits - TotalUnitsToday;
 

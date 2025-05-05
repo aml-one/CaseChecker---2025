@@ -165,7 +165,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    
+
     private List<string> debugMessages = [];
     public List<string> DebugMessages
     {
@@ -266,7 +266,7 @@ public partial class MainViewModel : ObservableObject
     }
 
 
-    
+
     private string lastDBUpdate = "";
     public string LastDBUpdate
     {
@@ -792,7 +792,7 @@ public partial class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(UserPanels));
         }
     }
-    
+
     private List<UserPanelViewModel> userPanelViewModels = [];
     public List<UserPanelViewModel> UserPanelViewModels
     {
@@ -849,7 +849,7 @@ public partial class MainViewModel : ObservableObject
                 OrderByIndex = OrderByIdx;
         }
 
-        
+
         UpdateRequestCommand = new RelayCommand(o => UpdateRequest());
         StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
         SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
@@ -875,7 +875,7 @@ public partial class MainViewModel : ObservableObject
 
         Task.Run(() => GetServerInfo()).Wait();
         Task.Run(() => GetTheOrderInfos(AccessLevel)).Wait();
-        
+
     }
 
     private void ClearRightSideFilter()
@@ -1112,13 +1112,16 @@ public partial class MainViewModel : ObservableObject
     private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
     {
         _timer.Interval = 10000;
-        if (LastDBUpdate != ServerInfoModel.CheckedOutLastUpdate && !ServerInfoModel.ServerIsWritingDatabase && ServerIsOnline)
+        if (ServerInfoModel is not null)
         {
-            LastDBUpdateLocalTime = DateTime.Now.ToString("MMM d - h:mm:ss tt");
-            _ = GetTheOrderInfos(AccessLevel);
-            UpdateTimeColor = "LightGreen";
-            UpdateTimeOpacity = 1;
-            LastDBUpdate = ServerInfoModel.CheckedOutLastUpdate!;
+            if (LastDBUpdate != ServerInfoModel.CheckedOutLastUpdate && !ServerInfoModel.ServerIsWritingDatabase && ServerIsOnline)
+            {
+                LastDBUpdateLocalTime = DateTime.Now.ToString("MMM d - h:mm:ss tt");
+                _ = GetTheOrderInfos(AccessLevel);
+                UpdateTimeColor = "LightGreen";
+                UpdateTimeOpacity = 1;
+                LastDBUpdate = ServerInfoModel.CheckedOutLastUpdate!;
+            }
         }
 
         if (ServerIsOnline)
@@ -1128,7 +1131,7 @@ public partial class MainViewModel : ObservableObject
         if (!PanelsAddedalready)
         {
             PanelCount = Task.Run(() => GetDesignerCount().Result).Result;
-            
+
             if (AccessLevel.Equals("Both"))
             {
 
@@ -1149,7 +1152,7 @@ public partial class MainViewModel : ObservableObject
             else
             {
                 PanelsAddedalready = true;
-                
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     string designerID = AccessLevel;
@@ -1203,70 +1206,70 @@ public partial class MainViewModel : ObservableObject
     #region CoutUp functions
     private async Task CountUp_TotalUnitsLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalUnitsLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalCrownsLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalCrownsLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalAbutmentsLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalAbutmentsLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalOrdersLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalOrdersLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalUnitsLeftOverLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalUnitsLeftOverLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalOrdersLeftOversLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalOrdersLeftOversLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalUnitsTodayLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalUnitsTodayLeftSideFinal = i;
             Thread.Sleep(10);
         }
     }
-    
+
     private async Task CountUp_TotalOrdersTodayLeftSide(double Max)
     {
-        for(int i = 0; i <= Max; i++)
+        for (int i = 0; i <= Max; i++)
         {
             TotalOrdersTodayLeftSideFinal = i;
             Thread.Sleep(10);
@@ -1353,7 +1356,7 @@ public partial class MainViewModel : ObservableObject
         text = text.Replace("Someone moved this case manually here.", "有人手动将此案例移至此处");
         text = text.Replace("This case is NOT in the export folder!!!", "此案例不在导出文件夹中！ 忽略这个案例");
         text = text.Replace("This case were sent to both designer!", "这个案子发给了两位设计师");
-        text = text.Replace("The design needs to change!", "设计需要改变！");        
+        text = text.Replace("The design needs to change!", "设计需要改变！");
         return text;
     }
 
@@ -1391,7 +1394,7 @@ public partial class MainViewModel : ObservableObject
         return text;
     }
 
-    
+
     private void SortOrders()
     {
         Console.WriteLine("Sorting..");
@@ -1422,7 +1425,7 @@ public partial class MainViewModel : ObservableObject
                 }
 
             }
-            
+
         }
 
 
@@ -1505,7 +1508,7 @@ public partial class MainViewModel : ObservableObject
         http.Dispose();
         handler.Dispose();
     }
-    
+
     private async Task<int> GetDesignerCount()
     {
         var handler = new HttpClientHandler()
@@ -1606,7 +1609,7 @@ public partial class MainViewModel : ObservableObject
         http.DefaultRequestHeaders.Add("DeviceId", DeviceId);
 
         List<CheckedOutCasesModel> modelList = [];
-        
+
         try
         {
             string result = await http.GetStringAsync($"https://{ServerAddress}:10113/api/statscheckedoutcases/{designerID}");
